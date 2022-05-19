@@ -15,6 +15,29 @@ from sklearn.model_selection import train_test_split
 
 faces_folder ="data/faces/"
 facenet_model = keras.models.load_model('models/facenet_keras.h5')
+
+# Print iterations progress
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    # Print New Line on Complete
+    if iteration == total: 
+        print()
+        
 def get_embedding(img):
 	# scale pixel values
 	img = img.astype('float32')
@@ -59,8 +82,10 @@ def load_faces(train_folder):
 
     # Convert du lieu X_train sang embeding
     X_train_emb = []
-    for x in X_train:
-        X_train_emb.append(get_embedding(x))
+    X_train_len = len(X_train)
+    for i in range(X_train_len):
+        printProgressBar(i, X_train_len, prefix = 'Progress:', suffix = 'Complete', length = 50)
+        X_train_emb.append(get_embedding(X_train[i]))
 
     X_train_emb = np.array(X_train_emb)
     

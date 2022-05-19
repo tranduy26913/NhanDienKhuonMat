@@ -65,14 +65,14 @@ def SplitImage(name):
     randomize = np.arange(len(imgs))
     np.random.shuffle(randomize)
     imgs = imgs[randomize]
-
+    print(f'Đang xử lý ảnh của {name}')
     i = 0
     dem = 0
     while dem < 100 and i < len(imgs):  # 150 ảnh train
         image = imgs[i]
         filename_img = image_folder+'%s/%s_%04d.jpg' % (name, name, i+100)
-        print(filename_img)
-        cv2.imwrite(filename_img, image)
+        
+        
         gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         faces = detector(gray, 0)
         if len(faces) > 0:
@@ -88,7 +88,7 @@ def SplitImage(name):
             try:
                 face = cv2.resize(face, dest_size)
                 filename_face = face_folder+'%s/%s_%04d.jpg' % (name, name, i+100)
-
+                cv2.imwrite(filename_img, image)
                 cv2.imwrite(filename_face, face)
                 dem = dem + 1
             except:
